@@ -20,6 +20,8 @@ app.use(cookieParser());
 
 app.use('/', express.static(path.join(__dirname, 'public')));
 app.use('/', require('./routes/root'));
+app.use('/users', require('./routes/userRoutes'));
+app.use('/notes', require('./routes/noteRoutes'));
 
 app.all('*', (req, res) => {
   res.status(404);
@@ -42,9 +44,9 @@ mongoose.connection.once('open', () => {
 });
 
 mongoose.connection.on('error', (err) => {
-  console.log(err);
+  console.log('--> err =', err);
   logEvents(
-    `${err.no}: ${err.code}\t${err.syscall}\t${err.hostname}`,
+    `Errorcode: ${err.ok}:${err.code},\tCodename: ${err.codeName},\tGeneration: ${err.connectionGeneration}`,
     'mongoErrLog.log',
   );
 });
