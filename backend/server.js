@@ -8,6 +8,8 @@ const cors = require("cors")
 const corsOptions = require("./config/corsOptions")
 const connectDB = require("./config/dbConn")
 const mongoose = require("mongoose")
+const userRoutes = require("./routes/userRoutes")
+const noteRoutes = require("./routes/noteRoutes")
 
 const PORT = process.env.PORT || 3500
 
@@ -15,7 +17,6 @@ console.log("--> Environment is", process.env.NODE_ENV)
 connectDB()
 
 const app = express()
-
 app.use(logger)
 app.use(cors(corsOptions))
 app.use(express.json())
@@ -23,6 +24,9 @@ app.use(cookieParser())
 
 app.use("/", express.static(path.join(__dirname, "public")))
 app.use("/", require("./routes/root"))
+app.use("/api/users", userRoutes)
+app.use("/notes", noteRoutes)
+
 app.all("*", (req, res) => {
   res.status(404)
 
